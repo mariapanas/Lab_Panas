@@ -55,15 +55,15 @@ jobs:
         run: |
           
           dotnet tool install --global dotnet-sonarscanner --version 5.14.0 
-          echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
-          dotnet sonarscanner begin `
-          /d:sonar.projectKey="mariapanas_Lab_Panas" `
-          /d:sonar.organization="mariapanas" `
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}" ` 
-          /d:sonar.cs.opencover.reportsPaths="**/coverage.xml" `
-          /d:sonar.cpd.cs.minimumTokens=40 `
-          /d:sonar.cpd.cs.minimumLines=5 `
-          /d:sonar.exclusions=**/bin/**,**/obj/**,**/sonarcloud.yml `
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          dotnet sonarscanner begin \
+          /d:sonar.projectKey="mariapanas_Lab_Panas" \
+          /d:sonar.organization="mariapanas" \
+          /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \ 
+          /d:sonar.cs.opencover.reportsPaths="**/coverage.xml" \
+          /d:sonar.cpd.cs.minimumTokens=40 \
+          /d:sonar.cpd.cs.minimumLines=5 \
+          /d:sonar.exclusions=**/bin/**,**/obj/**,**/sonarcloud.yml \
           /d:sonar.qualitygate.wait=true
         shell: pwsh
       # 2) BUILD & TEST
@@ -75,8 +75,8 @@ jobs:
       #- name: Tests with coverage (OpenCover)
       #  run: |
       #    dotnet test NetSdrClientAppTests/NetSdrClientAppTests.csproj -c Release --no-build `
-      #      /p:CollectCoverage=true `
-      #      /p:CoverletOutput=TestResults/coverage.xml `
+      #      /p:CollectCoverage=true \
+      #      /p:CoverletOutput=TestResults/coverage.xml \
       #      /p:CoverletOutputFormat=opencover
       #  shell: pwsh
 
@@ -84,4 +84,3 @@ jobs:
       - name: SonarScanner End
         if: success() 
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-        shell: pwsh
